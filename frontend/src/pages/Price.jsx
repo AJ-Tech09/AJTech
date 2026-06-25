@@ -1,11 +1,8 @@
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Pricing() {
   const navigate = useNavigate();
-
-
   const websitePlans = [
     {
       name: "Starter Package",
@@ -66,7 +63,7 @@ export default function Pricing() {
   const appPlans = [
     {
       name: "Starter App",
-      price: "₦49,999 – ₦99,999",
+      price: "₦50,000 – ₦100,000",
       description: "Simple mobile app UI templates.",
       features: [
         "Full source code (React Native / Expo)",
@@ -77,7 +74,7 @@ export default function Pricing() {
     },
     {
       name: "Standard App",
-      price: "₦100,000 – ₦200,000",
+      price: "₦100,000 – ₦250,000",
       description: "For real business mobile apps.",
       features: [
         "Everything in Starter",
@@ -89,7 +86,7 @@ export default function Pricing() {
     },
     {
       name: "Premium App",
-      price: "₦200,000 – ₦500,000+",
+      price: "₦250,000 – ₦600,000+",
       description: "Production-ready mobile applications.",
       features: [
         "Full production structure",
@@ -194,66 +191,6 @@ export default function Pricing() {
       cursor: "pointer",
       fontSize: "1rem",
     },
-
-    // Modal
-    modalOverlay: {
-      position: "fixed",
-      inset: 0,
-      background: "rgba(0, 0, 0, 0.65)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: 16,
-      zIndex: 9999,
-    },
-
-    modal: {
-      width: "100%",
-      maxWidth: 760,
-      background: "#0f172a",
-      color: "#fff",
-      border: "1px solid rgba(212,175,55,0.35)",
-      borderRadius: 16,
-      boxShadow: "0 20px 60px rgba(0,0,0,0.55)",
-      padding: 18,
-    },
-
-    modalHeader: {
-      display: "flex",
-      alignItems: "flex-start",
-      justifyContent: "space-between",
-      gap: 12,
-      marginBottom: 10,
-    },
-
-    modalTitle: {
-      fontSize: 16,
-      fontWeight: 800,
-      color: "#d4af37",
-      lineHeight: 1.3,
-      marginTop: 2,
-    },
-
-    closeBtn: {
-      border: "1px solid rgba(212,175,55,0.35)",
-      background: "transparent",
-      color: "#fff",
-      borderRadius: 10,
-      width: 38,
-      height: 38,
-      cursor: "pointer",
-      display: "inline-flex",
-      alignItems: "center",
-      justifyContent: "center",
-      flex: "0 0 auto",
-      fontSize: 18,
-    },
-
-    modalBody: {
-      fontSize: 14.5,
-      lineHeight: 1.6,
-      color: "rgba(255,255,255,0.9)",
-    },
   };
 
   const renderPlans = (plans) =>
@@ -280,75 +217,41 @@ export default function Pricing() {
           ))}
         </ul>
 
-        <button style={styles.button} onClick={() => navigate("/projects")}>
-          Buy Now
-        </button>
+        <button
+  style={styles.button}
+  onClick={() => navigate("/projects")}
+>
+  Buy Now
+</button>
       </motion.div>
     ));
 
   return (
-    <>
-      {isModalOpen && (
-        <div
-          style={styles.modalOverlay}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Pricing notice"
+    <section style={styles.section}>
+      <div style={styles.container}>
+        <motion.h1
+          style={styles.title}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
         >
-          <motion.div
-            style={styles.modal}
-            initial={{ opacity: 0, y: 20, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.2 }}
-          >
-            <div style={styles.modalHeader}>
-              <div style={styles.modalTitle}>Please note</div>
-              <button style={styles.closeBtn} onClick={closeModal}>
-                ✕
-              </button>
-            </div>
+          Pricing Plans
+        </motion.h1>
 
-            <div style={styles.modalBody}>
-              Please note: The price displayed on each project card represents the
-              base price for that project. Final cost may vary depending on the
-              selected package, required features, and customization needs.
-              Flexible pricing and negotiation are available.
-            </div>
-          </motion.div>
-        </div>
-      )}
+        <p style={styles.subtitle}>
+          Pick a package that matches your goals — 
+          every website and mobile app includes full source code, 
+          giving you complete ownership and flexibility.
+        </p>
 
-      <section style={styles.section}>
-        <div style={styles.container}>
-          <motion.h1
-            style={styles.title}
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            Pricing Plans
-          </motion.h1>
+        {/* WEBSITE PRICING */}
+        <h2 style={styles.sectionTitle}>🌐 Website Pricing</h2>
+        <div style={styles.grid}>{renderPlans(websitePlans)}</div>
 
-          <p style={styles.subtitle}>
-            Pick a package that matches your goals — every website and mobile
-            app includes full source code, giving you complete ownership and
-            flexibility.
-          </p>
-
-          {/* WEBSITE PRICING */}
-          <h2 style={styles.sectionTitle}>🌐 Website Pricing</h2>
-          <div style={styles.grid}>{renderPlans(websitePlans)}</div>
-
-          {/* MOBILE APP PRICING */}
-          <h2 style={styles.sectionTitle}>📱 Mobile App Pricing</h2>
-          <div style={styles.grid}>{renderPlans(appPlans)}</div>
-        </div>
-      </section>
-    </>
-
-    
+        {/* MOBILE APP PRICING */}
+        <h2 style={styles.sectionTitle}>📱 Mobile App Pricing</h2>
+        <div style={styles.grid}>{renderPlans(appPlans)}</div>
+      </div>
+    </section>
   );
-
-  
 }
-
