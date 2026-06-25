@@ -14,6 +14,7 @@ import Home from "./pages/Home"
 import Projects from "./pages/Projects"
 import Dashboard from "./pages/Dashboard"
 import AdminLogin from "./pages/AdminLogin"
+import Price from "./pages/Price"
 
 import logo from "./assets/Logo.png"
 
@@ -22,6 +23,7 @@ function Navbar({ token, onNavigate }) {
   return (
     <>
       <Link to="/" onClick={onNavigate}>Home</Link>
+      <Link to="/price" onClick={onNavigate}>Pricing</Link>
       <Link to="/projects" onClick={onNavigate}>Projects</Link>
       {token ? (
         <Link to="/dashboard" onClick={onNavigate}>Dashboard</Link>
@@ -79,6 +81,7 @@ function AppRoutes() {
 
       <Routes>
         <Route path="/" element={<AnimatedPage><Home /></AnimatedPage>} />
+        <Route path="/price" element={<AnimatedPage><Price /></AnimatedPage>} />
         <Route path="/projects" element={<AnimatedPage><Projects /></AnimatedPage>} />
         <Route path="/admin" element={<AnimatedPage><AdminLogin /></AnimatedPage>} />
         <Route

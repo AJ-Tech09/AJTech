@@ -1,115 +1,6 @@
-// import { useEffect, useState } from "react"
-// import { motion } from "framer-motion"
-// import API from "../services/api"
-
-// export default function Projects() {
-//   const [projects, setProjects] = useState([])
-
-//   useEffect(() => {
-//     API.get("/projects")
-//       .then(res => setProjects(res.data))
-//       .catch(err => console.log(err))
-//   }, [])
-
-//   return (
-//     <motion.div
-//       initial={{ opacity: 0 }}
-//       animate={{ opacity: 1 }}
-//       transition={{ duration: 1.2 }}
-//       style={{ padding: "30px" }}
-//     >
-//       {/* PAGE TITLE */}
-//       <motion.h1
-//         initial={{ y: -40, opacity: 0 }}
-//         animate={{ y: 0, opacity: 1 }}
-//         transition={{ duration: 1.5 }}
-//       >
-//         📦 My Projects Marketplace
-//       </motion.h1>
-
-//       {/* GRID */}
-//       <div
-//         style={{
-//           display: "grid",
-//           gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-//           gap: "20px",
-//           marginTop: "30px"
-//         }}
-//       >
-//         {projects.map((project, index) => (
-//           <motion.div
-//             key={project.id}
-//             initial={{ opacity: 0, y: 40 }}
-//             animate={{ opacity: 1, y: 0 }}
-//             transition={{
-//               duration: 1.2,
-//               delay: index * 0.2, // 👈 stagger effect
-//               ease: "easeInOut"
-//             }}
-//             whileHover={{ scale: 1.03 }}
-//             style={{
-//               border: "1px solid #ddd",
-//               borderRadius: "12px",
-//               padding: "15px",
-//               background: "#fff"
-//             }}
-//           >
-//             {/* TITLE */}
-//             <h3>{project.title}</h3>
-
-//             {/* DESCRIPTION */}
-//             <p style={{ fontSize: "14px", opacity: 0.8 }}>
-//               {project.description}
-//             </p>
-
-//             {/* PRICE */}
-//             <p><b>₦{project.price}</b></p>
-
-//             {/* BUTTONS */}
-//             <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              
-//               {/* LIVE DEMO */}
-//               <a
-//                 href={project.live_demo}
-//                 target="_blank"
-//                 style={{
-//                   padding: "6px 10px",
-//                   background: "#007bff",
-//                   color: "#fff",
-//                   borderRadius: "5px",
-//                   textDecoration: "none"
-//                 }}
-//               >
-//                 Live Demo
-//               </a>
-
-//               {/* WHATSAPP (placeholder for now) */}
-//               <a
-//                 href={project.whatsapp}
-//                 target="_blank"
-//                 style={{
-//                   padding: "6px 10px",
-//                   background: "green",
-//                   color: "#fff",
-//                   borderRadius: "5px",
-//                   textDecoration: "none"
-//                 }}
-//               >
-//                 WhatsApp
-//               </a>
-
-//             </div>
-//           </motion.div>
-//         ))}
-//       </div>
-//     </motion.div>
-//   )
-// }
-
-import { useEffect, useState } from "react"
-import { motion } from "framer-motion"
-import API from "../services/api"
-
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import API from "../services/api";
 
 const carouselItems = [
   {
@@ -132,107 +23,143 @@ const carouselItems = [
     icon: "🔒",
     sub: "Optimized experiences with security-first development.",
   },
-]
-
+];
 
 export default function Projects() {
-  const [projects, setProjects] = useState([])
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [projects, setProjects] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") setIsModalOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
 
   useEffect(() => {
     const fetch = async () => {
-      const res = await API.get("/projects")
-      setProjects(res.data)
-    }
+      const res = await API.get("/projects");
+      setProjects(res.data);
+    };
 
-    fetch()
-  }, [])
+    fetch();
+  }, []);
 
   const buyOnWhatsApp = (p) => {
-    const message = `Hello admin, I want to buy:
-Project: ${p.title}
-Price: ₦${p.price}`
-    window.open(`https://wa.me/${p.whatsapp}?text=${encodeURIComponent(message)}`)
-  }
+    const message = `Hello admin, I want to buy:\nProject: ${p.title}\nPrice: ₦${p.price}`;
+    window.open(
+      `https://wa.me/${p.whatsapp}?text=${encodeURIComponent(message)}`
+    );
+  };
 
   const openDemo = (url) => {
-    window.open(url, "_blank")
-  }
+    window.open(url, "_blank");
+  };
 
   return (
-    <div style={styles.wrapper}>
-      <h1 style={{ ...styles.title, textAlign: "center" }}>🛒 All Projects</h1>
-
-
-      {/* HERO COPY + CAROUSEL STATS */}
-      <div style={styles.topCopy}>
-        <h2 style={styles.topHeading}>Building Digital Experiences That Deliver Results</h2>
-        <p style={styles.topParagraph}>
-
-          Every project represents a unique challenge, a bold idea, and a commitment to excellence. From business websites and e-commerce platforms to custom web applications and mobile apps, our portfolio reflects our passion for creating digital products that are fast, scalable, and designed to make an impact.
-          <br />
-          <br />
-          Explore a selection of projects that showcase our expertise in design, development, and innovation.
-        </p>
-      </div>
-
-      <div style={styles.statsWrap}>
-        {carouselItems.map((item) => (
-          <div key={item.label} style={styles.statCard}>
-            <div style={styles.statIcon}>{item.icon}</div>
-            <div style={styles.statValue}>{item.label}</div>
-            <div style={styles.statSub}>{item.sub}</div>
-          </div>
-        ))}
-      </div>
-
-
-
-      <div style={styles.grid}>
-        {projects.map((p, i) => (
-          <motion.div
-            key={p.id}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: i * 0.05 }}
-            style={styles.card}
-          >
-
-            {p.image && (
-              <img
-                src={`https://ajtech-fc3f.onrender.com/${p.image}`}
-                style={styles.image}
-              />
-            )}
-
-            <h3>{p.title}</h3>
-            <p>{p.description}</p>
-            <p style={{ color: "#d4af37" }}>₦{p.price}</p>
-
-            <div style={styles.row}>
-
+    <>
+      {isModalOpen && (
+        <div
+          style={styles.modalOverlay}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Pricing notice"
+          onMouseDown={(e) => {
+            // Close only when clicking the overlay (not inside the modal)
+            if (e.target === e.currentTarget) setIsModalOpen(false);
+          }}
+        >
+          <div style={styles.modal}>
+            <div style={styles.modalHeader}>
+              <div style={styles.modalTitle}>Please note</div>
               <button
-                onClick={() => openDemo(p.live_demo)}
-                style={styles.demoBtn}
+                type="button"
+                style={styles.closeBtn}
+                aria-label="Close"
+                onClick={() => setIsModalOpen(false)}
               >
-                Live Demo
+                ✕
               </button>
-
-              <button
-                onClick={() => buyOnWhatsApp(p)}
-                style={styles.buyBtn}
-              >
-                Buy on WhatsApp
-              </button>
-
             </div>
 
-          </motion.div>
-        ))}
+            <div style={styles.modalBody}>
+              Please note: The price displayed on each project card represents the
+              base price for that project. Final cost may vary depending on the
+              selected package, required features, and customization needs.
+              Flexible pricing and negotiation are available.
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div style={styles.wrapper}>
+        <h1 style={{ ...styles.title, textAlign: "center" }}>🛒 All Projects</h1>
+
+        {/* HERO COPY + CAROUSEL STATS */}
+        <div style={styles.topCopy}>
+          <h2 style={styles.topHeading}>
+            Building Digital Experiences That Deliver Results
+          </h2>
+          <p style={styles.topParagraph}>
+            Every project represents a unique challenge, a bold idea, and a
+            commitment to excellence. From business websites and e-commerce
+            platforms to custom web applications and mobile apps, our portfolio
+            reflects our passion for creating digital products that are fast,
+            scalable, and designed to make an impact.
+            <br />
+            <br />
+            Explore a selection of projects that showcase our expertise in design,
+            development, and innovation.
+          </p>
+        </div>
+
+        <div style={styles.statsWrap}>
+          {carouselItems.map((item) => (
+            <div key={item.label} style={styles.statCard}>
+              <div style={styles.statIcon}>{item.icon}</div>
+              <div style={styles.statValue}>{item.label}</div>
+              <div style={styles.statSub}>{item.sub}</div>
+            </div>
+          ))}
+        </div>
+
+        <div style={styles.grid}>
+          {projects.map((p, i) => (
+            <motion.div
+              key={p.id}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: i * 0.05 }}
+              style={styles.card}
+            >
+              {p.image && (
+                <img
+                  src={`https://ajtech-fc3f.onrender.com/${p.image}`}
+                  style={styles.image}
+                />
+              )}
+
+              <h3>{p.title}</h3>
+              <p>{p.description}</p>
+              <p style={{ color: "#d4af37" }}>₦{p.price}</p>
+
+              <div style={styles.row}>
+                <button onClick={() => openDemo(p.live_demo)} style={styles.demoBtn}>
+                  Live Demo
+                </button>
+
+                <button onClick={() => buyOnWhatsApp(p)} style={styles.buyBtn}>
+                  Buy on WhatsApp
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </div>
-  )
+    </>
+  );
 }
 
 const styles = {
@@ -240,24 +167,24 @@ const styles = {
     background: "#0b0b0b",
     minHeight: "100vh",
     color: "#fff",
-    padding: 20
+    padding: 20,
   },
 
   title: {
-    color: "#d4af37"
+    color: "#d4af37",
   },
 
   grid: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
     gap: 15,
-    marginTop: 20
+    marginTop: 20,
   },
 
   card: {
     background: "#141414",
     padding: 15,
-    borderRadius: 10
+    borderRadius: 10,
   },
 
   image: {
@@ -265,13 +192,13 @@ const styles = {
     height: 180,
     objectFit: "cover",
     objectPosition: "center",
-    borderRadius: 8
+    borderRadius: 8,
   },
 
   row: {
     display: "flex",
     gap: 10,
-    marginTop: 10
+    marginTop: 10,
   },
 
   demoBtn: {
@@ -280,7 +207,7 @@ const styles = {
     background: "#333",
     color: "#fff",
     border: "none",
-    cursor: "pointer"
+    cursor: "pointer",
   },
 
   buyBtn: {
@@ -289,7 +216,7 @@ const styles = {
     background: "#25D366",
     color: "#000",
     border: "none",
-    cursor: "pointer"
+    cursor: "pointer",
   },
 
   topCopy: {
@@ -307,7 +234,6 @@ const styles = {
     lineHeight: 1.25,
     textAlign: "center",
   },
-
 
   topParagraph: {
     color: "rgba(255,255,255,0.78)",
@@ -358,67 +284,65 @@ const styles = {
     lineHeight: 1.5,
   },
 
-  /* Keep older carousel-related keys (unused now) */
-  carousel: {
-    marginTop: 14,
-    borderRadius: 16,
-    border: "1px solid rgba(212,175,55,0.18)",
-    background: "rgba(20,20,20,0.65)",
-    padding: 14,
-  },
-
-  carouselViewport: {
-    overflow: "hidden",
-  },
-
-  carouselTrack: {
+  /* ===== Modal ===== */
+  modalOverlay: {
+    position: "fixed",
+    inset: 0,
+    background: "rgba(0,0,0,0.65)",
     display: "flex",
-    width: `${carouselItems.length * 100}%`,
-  },
-
-  carouselSlide: {
-    width: `${100 / carouselItems.length}%`,
-    flex: `0 0 ${100 / carouselItems.length}%`,
-    padding: "14px 10px",
-    borderRadius: 12,
-    textAlign: "center",
-    border: "1px solid rgba(212,175,55,0.16)",
-    background: "rgba(255,255,255,0.02)",
-    marginRight: 12,
-  },
-
-  carouselIcon: {
-    fontSize: 26,
-    marginBottom: 8,
-  },
-
-  carouselValue: {
-    color: "#d4af37",
-    fontWeight: 800,
-    marginBottom: 6,
-    fontSize: 15.5,
-  },
-
-  carouselSub: {
-    color: "rgba(255,255,255,0.72)",
-    fontSize: 13.5,
-    lineHeight: 1.5,
-  },
-
-  carouselDots: {
-    display: "flex",
-    gap: 10,
+    alignItems: "center",
     justifyContent: "center",
-    marginTop: 12,
+    padding: 16,
+    zIndex: 9999,
   },
 
-  dot: {
-    width: 12,
-    height: 12,
-    borderRadius: 999,
+  modal: {
+    width: "100%",
+    maxWidth: 760,
+    background: "#0f172a",
+    color: "#fff",
     border: "1px solid rgba(212,175,55,0.35)",
-    cursor: "pointer",
+    borderRadius: 16,
+    boxShadow: "0 20px 60px rgba(0,0,0,0.55)",
+    padding: 18,
   },
 
-}
+  modalHeader: {
+    display: "flex",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    gap: 12,
+    marginBottom: 10,
+  },
+
+  modalTitle: {
+    fontSize: 16,
+    fontWeight: 800,
+    color: "#d4af37",
+    lineHeight: 1.3,
+    marginTop: 2,
+  },
+
+  closeBtn: {
+    border: "1px solid rgba(212,175,55,0.35)",
+    background: "transparent",
+    color: "#fff",
+    borderRadius: 10,
+    width: 38,
+    height: 38,
+    cursor: "pointer",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flex: "0 0 auto",
+    fontSize: 18,
+  },
+
+  modalBody: {
+    fontSize: 14.5,
+    lineHeight: 1.6,
+    color: "rgba(255,255,255,0.92)",
+    wordBreak: "break-word",
+  },
+};
 

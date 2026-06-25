@@ -131,7 +131,7 @@ export default function Home() {
       {
         label: "WhatsApp",
         icon: <FaWhatsapp size={26} />,
-        href: "https://wa.me/349069260318",
+        href: "https://wa.me/2349069260318",
       },
       {
         label: "Instagram",
