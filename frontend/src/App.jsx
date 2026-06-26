@@ -7,6 +7,7 @@ import {
 } from "react-router-dom"
 import { AnimatePresence, motion } from "framer-motion"
 
+
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
 
@@ -17,6 +18,9 @@ import AdminLogin from "./pages/AdminLogin"
 import Price from "./pages/Price"
 
 import logo from "./assets/Logo.png"
+
+
+
 
 /* ================= NAVBAR ================= */
 function Navbar({ token, onNavigate }) {

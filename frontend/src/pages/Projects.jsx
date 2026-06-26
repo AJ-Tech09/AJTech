@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import API from "../services/api";
 
+
 const carouselItems = [
   {
     label: "50+ Projects Delivered",
