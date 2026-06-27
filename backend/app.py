@@ -10,6 +10,16 @@ from routes.projects import projects_bp
 from models.admin import Admin
 from models.project import Project
 
+import cloudinary
+import os
+
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    secure=True
+)
+
 
 app = Flask(__name__)
 

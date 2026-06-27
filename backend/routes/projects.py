@@ -2,7 +2,13 @@ from flask import Blueprint, request, jsonify, current_app
 from models.project import Project
 from extensions import db
 from utils.auth import admin_required
+
 import os
+
+import cloudinary
+import cloudinary.uploader
+
+
 
 from werkzeug.utils import secure_filename
 
@@ -51,11 +57,11 @@ def add_project():
     image_url = None
 
     if image:
-        filename = secure_filename(image.filename)
-        filepath = os.path.join(current_app.config["UPLOAD_FOLDER"], filename)
-        image.save(filepath)
-
-        image_url = f"/static/uploads/{filename}"
+        # Upload the image to Cloudinary
+        upload_result = cloudinary.uploader.upload(image,
+                                                   folder="ajtech/projects")
+        image_url = upload_result.get("secure_url")
+       
 
     project = Project(
         title=title,
@@ -97,11 +103,10 @@ def update_project(id):
     image = request.files.get("image")
 
     if image:
-        filename = secure_filename(image.filename)
-        filepath = os.path.join(current_app.config["UPLOAD_FOLDER"], filename)
-        image.save(filepath)
-
-        project.image = f"/static/uploads/{filename}"
+        # Upload the new image to Cloudinary
+        upload_result = cloudinary.uploader.upload(image,
+                                                   folder="ajtech/projects")
+        project.image = upload_result.get("secure_url")
 
     db.session.commit()
 
